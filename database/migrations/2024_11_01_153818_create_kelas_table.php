@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user', function (Blueprint $table) {
-            $table->id('id_user');
-            $table->string('username', 50)->unique();
-            $table->string('password', 255);
-            $table->enum('level_akses', ['admin', 'guru', 'siswa', 'staf']);             
-            $table->string('foto_profil', 255)->nullable();
+        Schema::create('kelas', function (Blueprint $table) {
+            $table->id('id_kelas');
+            $table->string('nama_kelas', 100);
+            $table->foreignId('wali_kelas')->constrained('pegawai', 'id_pegawai')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user');
+        Schema::dropIfExists('kelas');
     }
 };
