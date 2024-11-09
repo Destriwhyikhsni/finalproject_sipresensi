@@ -8,7 +8,7 @@ class IndexController extends Controller
 {
     public function authBeranda() 
     { 
-        return view('web.beranda', [ 
+        return view('beranda', [ 
             'judul' => 'Halaman Beranda',
         ]); } }
 

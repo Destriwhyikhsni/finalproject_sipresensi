@@ -2,63 +2,74 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pegawai;
 use Illuminate\Http\Request;
 
 class pegawaiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $pegawai = Pegawai::all();
+        return view('pegawai', compact('pegawai'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('pegawai.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nip' => 'required|unique:pegawai|max:20',
+            'nama_pegawai' => 'required|max:100',
+            'jenis_pegawai' => 'required|in:guru,staf',
+            'mata_pelajaran' => 'nullable|max:100',
+            'tempat_lahir' => 'required|max:100',
+            'tanggal_lahir' => 'required|date',
+            'alamat' => 'required',
+            'no_telp' => 'required|max:20',
+            'email' => 'required|email|unique:pegawai',
+        ]);
+
+        Pegawai::create($request->all());
+
+        return redirect()->route('pegawai.index')->with('success', 'Pegawai berhasil ditambahkan');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit($id)
     {
-        //
+        $pegawai = Pegawai::findOrFail($id);
+        return view('pegawai.edit', compact('pegawai'));
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    
+    public function update(Request $request, $id)
     {
-        //
+        // Validasi input
+        $request->validate([
+            'nip' => 'required|unique:pegawai,nip,' . $id . ',id_pegawai',
+            'nama_pegawai' => 'required|max:100',
+            'jenis_pegawai' => 'required|in:guru,staf',
+            'mata_pelajaran' => 'nullable|max:100',
+            'tempat_lahir' => 'required|max:100',
+            'tanggal_lahir' => 'required|date',
+            'alamat' => 'required',
+            'no_telp' => 'required|max:20',
+            'email' => 'required|email|unique:pegawai,email,' . $id . ',id_pegawai',
+        ]);
+    
+        // Cari pegawai berdasarkan ID dan update data
+        $pegawai = Pegawai::findOrFail($id);
+        $pegawai->update($request->all());
+    
+        // Redirect ke halaman pegawai dengan pesan sukses
+        return redirect()->route('pegawai.index')->with('success', 'Pegawai berhasil diperbarui.');
     }
+    
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Pegawai $pegawai)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $pegawai->delete();
+        return redirect()->route('pegawai.index')->with('success', 'Pegawai berhasil dihapus');
     }
 }

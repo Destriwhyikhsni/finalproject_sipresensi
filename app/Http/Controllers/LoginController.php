@@ -27,7 +27,7 @@ class LoginController extends Controller
              return back()->with('error', 'User belum aktif');
           }
           $request->session()->regenerate();
-          return redirect()->intended(route('web.beranda'))->with('success', 'Login ke sistem berhasil');;
+          return redirect()->intended(route('beranda'))->with('success', 'Login ke sistem berhasil');;
        }
  
        return back()->with('error', 'Login Gagal');
@@ -51,7 +51,7 @@ class LoginController extends Controller
           'created_at' => now()
        ]);
  
-       return redirect()->route('login')->with('success', 'Registrasi berhasil, Silahkan Login');
+       return redirect()->route('auth.login')->with('success', 'Registrasi berhasil, Silahkan Login');
     }
  
     public function logoutBackend()
@@ -59,6 +59,6 @@ class LoginController extends Controller
        Auth::logout();
        request()->session()->invalidate();
        request()->session()->regenerateToken();
-       return redirect(route('login'));
+       return redirect(route('auth.login'));
     }
  }
