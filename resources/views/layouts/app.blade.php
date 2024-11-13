@@ -75,6 +75,16 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ route('siswa.index') }}" class="nav-link text-white">
+                            <i class="bi bi-person"></i> Data Siswa
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('jadwal.index') }}" class="nav-link text-white">
+                            <i class="bi bi-calendar-check"></i> Jadwal
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="#" class="nav-link text-white">
                             <i class="bi bi-calendar-check"></i> Presensi
                         </a>

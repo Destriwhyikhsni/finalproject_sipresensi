@@ -4,13 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Kelas;
 
 class Jadpel extends Model
 {
     use HasFactory;
 
-    protected $table = 'jadwal_pelajaran';
+    protected $table = 'jadpel';
     protected $primaryKey = 'id_jadwal';
     protected $fillable = [
         'id_guru',
@@ -28,9 +27,9 @@ class Jadpel extends Model
         return $this->belongsTo(Pegawai::class, 'id_guru');
     }
 
-    public function mataPelajaran()
+    public function mapel()
     {
-        return $this->belongsTo(MataPelajaran::class, 'id_mapel');
+        return $this->belongsTo(Mapel::class, 'id_mapel');
     }
 
     public function kelas()
@@ -41,5 +40,10 @@ class Jadpel extends Model
     public function presensi()
     {
         return $this->hasMany(Presensi::class, 'id_jadwal');
+    }
+
+    public function siswa()
+    {
+        return $this->hasMany(Siswa::class, 'kelas', 'id_kelas');
     }
 }

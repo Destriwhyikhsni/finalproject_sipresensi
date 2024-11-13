@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('id_siswa');
             $table->string('nisn', 20)->unique();
             $table->string('nama_siswa', 100);
-            $table->string('kelas', 20);
+            $table->foreignId('kelas')->constrained('kelas', 'id_kelas')->onDelete('cascade');
             $table->enum('jenis_kelamin', ['laki-laki','perempuan']);
             $table->string('tahun_ajaran', 20);
             $table->string('tempat_lahir', 100);

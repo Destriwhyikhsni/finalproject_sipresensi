@@ -37,7 +37,7 @@ class pegawaiSeeder extends Seeder
                 'nama_pegawai' => 'Eka Mayasari S.pd',
                 'jenis_pegawai' => 'Staf',
                 'mata_pelajaran' => null,
-                'tempat_lahir' => null,
+                'tempat_lahir' => 'Baturaja',
                 'tanggal_lahir' => '1988-06-27',
                 'alamat' => null,
                 'no_telp' => '081234229081',

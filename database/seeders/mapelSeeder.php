@@ -3,33 +3,46 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Mapel; // Ensure the Mapel model is imported correctly
-use App\Models\MataPelajaran;
+use Illuminate\Support\Facades\DB;
 
 class mapelSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     *
+     * @return void
      */
-    public function run(): void
+    public function run()
     {
-        MataPelajaran::insert([
+        DB::table('mapel')->insert([
             [
-                'nama_pelajaran' => 'Matematika',
-                'tingkat_kelas' => 'Kelas 5',
+                'nama_mapel' => 'Bahasa Indonesia',
+                'tingkat_kelas' => '1'
             ],
             [
-                'nama_pelajaran' => 'Bahasa Indonesia',
-                'tingkat_kelas' => 'Kelas 3',
+                'nama_mapel' => 'Matematika',
+                'tingkat_kelas' => '1'
             ],
             [
-                'nama_pelajaran' => 'Pjok',
-                'tingkat_kelas' => 'Kelas 4',
+                'nama_mapel' => 'Ilmu Pengetahuan Alam (IPA)',
+                'tingkat_kelas' => '1'
             ],
             [
-                'nama_pelajaran' => 'Agama Islam',
-                'tingkat_kelas' => 'Kelas 2',
+                'nama_mapel' => 'Pendidikan Agama',
+                'tingkat_kelas' => '1'
             ],
+            [
+                'nama_mapel' => 'Pendidikan Pancasila dan Kewarganegaraan (PPKn)',
+                'tingkat_kelas' => '1'
+            ],
+            [
+                'nama_mapel' => 'Seni Budaya dan Prakarya (SBdP)',
+                'tingkat_kelas' => '1'
+            ],
+            [
+                'nama_mapel' => 'Pendidikan Jasmani, Olahraga, dan Kesehatan (PJOK)',
+                'tingkat_kelas' => '1'
+            ]
         ]);
     }
 }

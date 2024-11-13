@@ -11,7 +11,7 @@ class kelasController extends Controller
     // Menampilkan Daftar Kelas
 public function index()
     {
-        $kelas = Kelas::with('waliKelas')->get(); // Mengambil semua kelas beserta wali kelasnya
+        $kelas = Kelas::with(['waliKelas', 'siswa'])->get(); // Mengambil semua kelas beserta wali kelasnya
         return view('kelas', compact('kelas'));
     }
 

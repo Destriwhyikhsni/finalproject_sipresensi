@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Kelas;
-use Kelas as GlobalKelas;
 
 class kelasSeeder extends Seeder
 {
@@ -13,7 +12,7 @@ class kelasSeeder extends Seeder
      */
     public function run(): void
     {
-        GlobalKelas::insert([
+        Kelas::insert([
             [
                 'nama_kelas' => 'Kelas 1',
                 'wali_kelas' => 'Nildawati A.md',
