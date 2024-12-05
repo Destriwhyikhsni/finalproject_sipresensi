@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pegawai;
+use App\Models\PresensiPegawai;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class pegawaiController extends Controller
 {
@@ -11,6 +13,17 @@ class pegawaiController extends Controller
     {
         $pegawai = Pegawai::all();
         return view('pegawai', compact('pegawai'));
+    }
+
+    public function dashboard()
+    {
+        $user = Auth::user(); // Dapatkan pengguna login
+
+        $presensi = PresensiPegawai::where('id_pegawai', $user->pegawai_id)
+        ->where('tanggal_presensi', now()->toDateString())
+        ->first();
+        
+        return view('dashboard', compact('presensi'));
     }
 
     public function create()

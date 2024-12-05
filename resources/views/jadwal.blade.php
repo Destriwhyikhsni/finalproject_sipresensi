@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h2>Daftar Jadwal</h2>
-    <a href="{{ route('jadwal.create') }}" class="btn btn-primary mb-3">Tambah Jadwal</a>
+    <a href="{{ route('jadwal.create') }}" class="btn btn-primary mb-3" style="background-color: #80C4E9; font-size: 13px; color:black;">Tambah Jadwal</a>
 
     @if (session('success'))
         <div class="alert alert-success">
@@ -11,7 +11,19 @@
         </div>
     @endif
 
-    <table class="table">
+    <style>
+        .small-font-table {
+            font-size: 13px; /* Ukuran font untuk tabel */
+        }
+        .btn-small {
+            font-size: 13px; /* Ukuran font tombol */
+            width: 80px;    /* Panjang tombol yang sama */
+            text-align: center;
+            padding: 5px 10px; /* Padding untuk tombol lebih kecil */
+        }
+    </style>
+
+    <table class="table table-sm small-font-table">
         <thead>
             <tr>
                 <th>ID</th>
@@ -39,11 +51,15 @@
                     <td>{{ $jadwal->ruangan }}</td>
                     <td>{{ $jadwal->status_jadwal }}</td>
                     <td>
-                        <a href="{{ route('jadwal.edit', $jadwal->id_jadwal) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{{ route('jadwal.edit', $jadwal->id_jadwal) }}" 
+                           class="btn btn-warning btn-sm btn-small" 
+                           style="background-color: #80C4E9; color:black;">Edit</a>
                         <form action="{{ route('jadwal.destroy', $jadwal->id_jadwal) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                            <button type="submit" 
+                                    class="btn btn-danger btn-sm btn-small" 
+                                    style="background-color: #D4EBF8; color:black;">Hapus</button>
                         </form>
                     </td>
                 </tr>

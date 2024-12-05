@@ -19,7 +19,7 @@ class User extends Authenticatable
      */
     protected $table = "user";
     protected $fillable = [
-        'name', 'email', 'role', 'status', 'password'
+        'name', 'email', 'role', 'status', 'password', 'pegawai_id'
     ];
 
     /**
@@ -31,6 +31,11 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public function pegawai()
+    {
+        return $this->belongsTo(Pegawai::class, 'pegawai_id', 'id_pegawai');
+    }
 
     /**
      * Get the attributes that should be cast.

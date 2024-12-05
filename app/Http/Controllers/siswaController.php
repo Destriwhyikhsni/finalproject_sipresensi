@@ -50,7 +50,7 @@ class siswaController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nisn' => 'required|unique:siswa,nisn,' . $id,
+            'nisn' => 'required|unique:siswa,nisn,' . $id. ',id_siswa',
             'nama_siswa' => 'required',
             'kelas' => 'required',
             'jenis_kelamin' => 'required',
@@ -75,5 +75,7 @@ class siswaController extends Controller
 
         return redirect()->route('siswa.index')
                          ->with('success', 'Data Siswa berhasil dihapus.');
+
+    
     }
 }

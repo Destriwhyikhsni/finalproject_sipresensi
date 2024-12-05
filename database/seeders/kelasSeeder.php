@@ -15,27 +15,27 @@ class kelasSeeder extends Seeder
         Kelas::insert([
             [
                 'nama_kelas' => 'Kelas 1',
-                'wali_kelas' => 'Nildawati A.md',
+                'wali_kelas' => 1,
             ],
             [
                 'nama_kelas' => 'Kelas 2',
-                'wali_kelas' => 'Nildawati A.md',
+                'wali_kelas' => 1,
             ],
             [
                 'nama_kelas' => 'Kelas 3',
-                'wali_kelas' => 'Nildawati A.md',
+                'wali_kelas' => 1,
             ],
             [
                 'nama_kelas' => 'Kelas 4',
-                'wali_kelas' => 'Nildawati A.md',
+                'wali_kelas' => 1,
             ],
             [
                 'nama_kelas' => 'Kelas 5',
-                'wali_kelas' => 'Nildawati A.md',
+                'wali_kelas' => 1,
             ],
             [
                 'nama_kelas' => 'Kelas 6',
-                'wali_kelas' => 'Nildawati A.md',
+                'wali_kelas' => 1,
             ],
         ]);
     }

@@ -32,4 +32,10 @@ class Pegawai extends Model
     {
         return $this->hasMany(JadPel::class, 'id_guru');
     }
+
+    public function user()
+{
+    return $this->hasOne(User::class, 'pegawai_id', 'id_pegawai');
+}
+   
 }

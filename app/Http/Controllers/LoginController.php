@@ -27,11 +27,18 @@ class LoginController extends Controller
              return back()->with('error', 'User belum aktif');
           }
           $request->session()->regenerate();
-          return redirect()->intended(route('beranda'))->with('success', 'Login ke sistem berhasil');;
-       }
+
+        // Redirect berdasarkan role
+        if (Auth::user()->role == 1) {
+            return redirect()->route('beranda');
+        } else {
+            return redirect()->route('dashboard');
+        }       
+        
+      }
  
-       return back()->with('error', 'Login Gagal');
-    }
+      return redirect()->route('auth.login')->withErrors(['email' => 'Email or password is incorrect']);
+   }
  
  
     public function registerUser(Request $request)

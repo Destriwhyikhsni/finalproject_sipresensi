@@ -1,70 +1,55 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use App\Models\Jadpel;
-use App\Models\Presensi;
-use App\Models\Siswa;
 use Illuminate\Http\Request;
+use App\Models\PresensiPegawai;
+use Illuminate\Support\Facades\Auth;
 
 class PresensiController extends Controller
 {
-    // Show the form to select the schedule
-    public function index(Request $request)
+    public function clockIn(Request $request)
     {
-        // Get the selected jadwal (schedule)
-        $jadwal = Jadpel::find($request->jadwal_id);
-    
-        if ($jadwal) {
-            // Fetch the students that belong to the class for the selected schedule
-            // $students = Siswa::where('kelas_id', $jadwal->id_kelas)->get();
-            $students = Siswa::where('kelas', $jadwal->kelas->nama_kelas)->get();
+        $user = Auth::user(); // Dapatkan pengguna login
 
-        } else {
-            // No jadwal selected or found
-            $students = collect(); // Empty collection
-        }
-    
-        $jadpel = Jadpel::all(); // Correctly fetch all jadpel
+        // Cari data presensi berdasarkan pengguna login dan tanggal hari ini
+        $presensi = PresensiPegawai::where('id_pegawai', $user->pegawai_id)
+            ->where('tanggal_presensi', now()->toDateString())
+            ->first();
 
-        // Pass the jadwal and students to the view
-        return view('presensi', compact('jadwal', 'students', 'jadpel'));
-    }
-
-    // Show students for the selected jadpel
-    public function showPresensiForm($id_jadwal)
-    {
-        // Fetch the jadwal (schedule)
-        $jadwal = Jadpel::findOrFail($id_jadwal);
-
-        // Fetch students based on the selected class
-        // $students = Siswa::where('kelas_id', $jadwal->id_kelas)->get();
-        $students = Siswa::where('kelas', $jadwal->kelas->nama_kelas)->get();
-
-        return view('presensi.show', compact('jadwal', 'students'));
-    }
-
-    // Save the presensi (attendance)
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'jadwal_id' => 'required',
-            'siswa_id' => 'required|array',
-            'status_presensi' => 'required|array',
-            'keterangan' => 'nullable|array',
-        ]);
-
-        // Loop through each student and save their attendance
-        foreach ($request->siswa_id as $index => $siswa_id) {
-            // Create the presensi record for each student
-            Presensi::create([
-                'nomor_identitas' => $siswa_id,
-                'id_jadwal' => $request->jadwal_id,
-                'status_presensi' => $request->status_presensi[$index],
-                'keterangan' => $request->keterangan[$index] ?? null,
-                'tanggal_presensi' => now(),
+        if (!$presensi) {
+            // Buat data presensi baru jika belum ada
+            PresensiPegawai::create([
+                'id_pegawai' =>  $user->pegawai_id,
+                'tanggal_presensi' => now()->toDateString(),
+                'waktu_masuk' => now()->toTimeString(),
+                'location' => $request->input('location', 'Unknown'),
             ]);
+
+            return redirect()->back()->with('success', 'Clock In berhasil!');
         }
 
-        return redirect()->route('presensi.index')->with('success', 'Presensi has been saved successfully!');
+        return redirect()->back()->with('error', 'Anda sudah melakukan Clock In hari ini.');
+    }
+
+    public function clockOut(Request $request)
+    {
+        $user = Auth::user(); // Dapatkan pengguna login
+
+        // Cari data presensi berdasarkan pengguna login dan tanggal hari ini
+        $presensi = PresensiPegawai::where('id_pegawai', $user->pegawai_id)
+            ->where('tanggal_presensi', now()->toDateString())
+            ->first();
+
+        if ($presensi && $presensi->waktu_keluar == null) {
+            // Update waktu keluar
+            $presensi->update([
+                'waktu_keluar' => now()->toTimeString(),
+            ]);
+
+            return redirect()->back()->with('success', 'Clock Out berhasil!');
+        }
+
+        return redirect()->back()->with('error', 'Anda belum Clock In atau sudah Clock Out hari ini.');
     }
 }

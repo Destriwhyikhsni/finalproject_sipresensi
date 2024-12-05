@@ -11,15 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->enum('role',[0,1,2,3])->default(0);
-            $table->boolean('status');
+            $table->enum('role', [0, 1, 2, 3])->default(0); // Contoh: 0 = Pegawai, 1 = Admin
+            $table->boolean('status')->default(true);
             $table->string('password');
+            $table->unsignedBigInteger('pegawai_id')->nullable(); // Relasi ke tabel pegawai
+            $table->foreign('pegawai_id')->references('id_pegawai')->on('pegawai')->onDelete('cascade');
             $table->timestamps();
         });
+        
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();

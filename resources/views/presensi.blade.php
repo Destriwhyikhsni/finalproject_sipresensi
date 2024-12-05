@@ -1,12 +1,17 @@
-<!-- presensi/index.blade.php -->
-
 @extends('layouts.app')
 
 @section('content')
 <div class="container">
-    <!-- Form to select jadwal -->
+    <!-- Notifikasi jika ada pesan sukses -->
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    <!-- Form untuk memilih jadwal mengajar -->
     <form action="{{ route('presensi.index') }}" method="GET">
-        @csrf
         <div class="form-group">
             <label for="jadwal_id">Pilih Jadwal Mengajar</label>
             <select name="jadwal_id" id="jadwal_id" class="form-control" onchange="this.form.submit()">
@@ -20,7 +25,7 @@
         </div>
     </form>
 
-    <!-- If a jadwal is selected, show the table for student attendance -->
+    <!-- Tampilkan tabel presensi jika jadwal sudah dipilih -->
     @if (isset($jadwal) && $jadwal)
         <form action="{{ route('presensi.store') }}" method="POST">
             @csrf
@@ -28,20 +33,22 @@
 
             <h3>Presensi Kelas: {{ $jadwal->mapel->nama_mapel }} - {{ $jadwal->kelas->nama_kelas }}</h3>
 
-            <table class="table table-bordered">
+            <table class="table table-bordered mt-3">
                 <thead>
                     <tr>
+                        <th>No</th>
                         <th>Nama Siswa</th>
-                        <th>Kelas</th>
+                        <th>Nomor Identitas</th>
                         <th>Status Kehadiran</th>
                         <th>Keterangan (Jika tidak hadir)</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($students as $student)
+                    @foreach ($students as $index => $student)
                         <tr>
+                            <td>{{ $index + 1 }}</td>
                             <td>{{ $student->nama_siswa }}</td>
-                            <td>{{ $student->kelas->nama_kelas }}</td>
+                            <td>{{ $student->nisn }}</td>
                             <td>
                                 <select name="status_presensi[{{ $student->id_siswa }}]" class="form-control">
                                     <option value="Hadir">Hadir</option>
@@ -57,11 +64,10 @@
                     @endforeach
                 </tbody>
             </table>
-
-            <button type="submit" class="btn btn-success">Simpan Kehadiran</button>
+            <button type="submit" class="btn btn-success mt-3">Simpan</button>
         </form>
     @else
-        <p class="alert alert-warning">Pilih jadwal mengajar terlebih dahulu untuk melihat data siswa.</p>
+        <p class="alert alert-warning mt-3">Pilih jadwal mengajar terlebih dahulu untuk melihat data siswa.</p>
     @endif
 </div>
 @endsection
