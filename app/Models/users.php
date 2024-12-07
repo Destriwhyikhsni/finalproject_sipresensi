@@ -12,10 +12,13 @@ class Users extends Model
     protected $table = 'user';
     protected $primaryKey = 'id_user';
     protected $fillable = [
-        'username',
+        'id',
+        'name',
+        'email',
         'password',
-        'level_akses',
-        'foto_profil'
+        'pegawai_id',
+        'role',
+        'status'
     ];
 
     protected $hidden = [

@@ -37,7 +37,6 @@ class userController extends Controller
         ]);
     
         $user = new User();
-        $user->nip = $request->nip;
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
@@ -83,6 +82,7 @@ class userController extends Controller
             return response()->json([
                 'status' => 'success',
                 'data' => [
+                    'id_pegawai' =>  $pegawai->id_pegawai,
                     'name' => $pegawai->nama_pegawai,
                     'email' => $pegawai->email,
                 ]

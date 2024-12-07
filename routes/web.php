@@ -33,6 +33,13 @@ Route::middleware(['auth', 'akses:1'])->group(function () {
     Route::resource('jadwal', JadwalController::class);
     Route::resource('user', userController::class);
     Route::get('user/get-pegawai/{nip}', [UserController::class, 'getPegawai']);
+    Route::get('user/create', [UserController::class, 'create'])->name('user.create');
+    Route::post('/user/store', [userController::class, 'store'])->name('user.store');
+    Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
+    Route::put('/user/{user}', [UserController::class, 'update'])->name('user.update');
+
+
+
 });
 
 

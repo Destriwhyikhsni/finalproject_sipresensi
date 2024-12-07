@@ -35,7 +35,7 @@ class Jadpel extends Model
     public function kelas()
     {
         return $this->belongsTo(Kelas::class, 'id_kelas', 'id_kelas');
-    }    
+    }
 
     public function presensi()
     {
@@ -45,5 +45,10 @@ class Jadpel extends Model
     public function siswa()
     {
         return $this->hasMany(Siswa::class, 'kelas', 'id_kelas');
+    }
+
+    public function pegawai()
+    {
+        return $this->belongsTo(Pegawai::class, 'id_guru', 'id_pegawai');
     }
 }

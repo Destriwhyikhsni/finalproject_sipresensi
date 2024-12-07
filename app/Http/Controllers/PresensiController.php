@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PresensiPegawai;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class PresensiController extends Controller
@@ -14,15 +15,16 @@ class PresensiController extends Controller
 
         // Cari data presensi berdasarkan pengguna login dan tanggal hari ini
         $presensi = PresensiPegawai::where('id_pegawai', $user->pegawai_id)
-            ->where('tanggal_presensi', now()->toDateString())
+            ->where('tanggal_presensi', Carbon::now('Asia/Jakarta')->toDateString())
             ->first();
 
         if (!$presensi) {
             // Buat data presensi baru jika belum ada
             PresensiPegawai::create([
                 'id_pegawai' =>  $user->pegawai_id,
-                'tanggal_presensi' => now()->toDateString(),
-                'waktu_masuk' => now()->toTimeString(),
+                'nama_pegawai' =>  $user->name,
+                'tanggal_presensi' => Carbon::now('Asia/Jakarta')->toDateString(),
+                'waktu_masuk' => Carbon::now('Asia/Jakarta')->toTimeString(),
                 'location' => $request->input('location', 'Unknown'),
             ]);
 
@@ -38,13 +40,13 @@ class PresensiController extends Controller
 
         // Cari data presensi berdasarkan pengguna login dan tanggal hari ini
         $presensi = PresensiPegawai::where('id_pegawai', $user->pegawai_id)
-            ->where('tanggal_presensi', now()->toDateString())
+            ->where('tanggal_presensi', Carbon::now('Asia/Jakarta')->toDateString())
             ->first();
 
         if ($presensi && $presensi->waktu_keluar == null) {
             // Update waktu keluar
             $presensi->update([
-                'waktu_keluar' => now()->toTimeString(),
+                'waktu_keluar' => Carbon::now('Asia/Jakarta')->toTimeString(),
             ]);
 
             return redirect()->back()->with('success', 'Clock Out berhasil!');

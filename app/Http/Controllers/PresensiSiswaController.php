@@ -5,21 +5,33 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\PresensiSiswa;
 use App\Models\Jadpel;
-use App\Models\Siswa;
 use App\Models\Kelas;
+use App\Models\Siswa;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class PresensiSiswaController extends Controller
 {
     // Menampilkan halaman presensi dan jadwal mengajar
     public function index(Request $request)
     {
-        $jadpel = Jadpel::all();
+        $user = Auth::user();
+        $pegawaiId = $user->pegawai_id;
+
+        $jadpel = Jadpel::with('pegawai')
+            ->where('id_guru', $pegawaiId)
+            ->get();
         $jadwal = null;
         $students = [];
 
         if ($request->has('jadwal_id')) {
             $jadwal = Jadpel::with('mapel', 'kelas')->find($request->jadwal_id);
-            $students = Siswa::with('kelas')->where('kelas', $jadwal->id_kelas)->get();
+
+            if ($jadwal) {
+                $students = Siswa::with('kelas')
+                    ->where('kelas', $jadwal->id_kelas)
+                    ->get();
+            }
         }
 
         return view('presensi', compact('jadpel', 'jadwal', 'students'));
@@ -35,10 +47,10 @@ class PresensiSiswaController extends Controller
             'keterangan' => 'nullable|array',
             'keterangan.*' => 'nullable|string',
         ]);
-
-        // Ambil data jadwal dan kelas terkait
         $jadwal = Jadpel::findOrFail($request->jadwal_id);
-        $kelasId = $jadwal->kelas->id_kelas;
+
+        $kelas = Kelas::where('id_kelas', $jadwal->id_kelas)->first();
+
 
         // Loop untuk menyimpan presensi setiap siswa
         foreach ($request->status_presensi as $siswa_id => $status) {
@@ -46,11 +58,12 @@ class PresensiSiswaController extends Controller
 
             PresensiSiswa::create([
                 'jadwal' => $request->jadwal_id,
-                'kelas' => $kelasId,
+                'kelas' => $kelas->id_kelas,
                 'siswa' => $siswa->id_siswa,
                 'nomor_identitas' => $siswa->nisn,
                 'nama_siswa' => $siswa->nama_siswa,
-                'tanggal_presensi' => now()->toDateString(),
+                'nama_kelas' => $kelas->nama_kelas,
+                'tanggal_presensi' => Carbon::now('Asia/Jakarta')->toDateString(),
                 'status_presensi' => $status,
                 'keterangan' => $request->keterangan[$siswa_id] ?? null,
             ]);

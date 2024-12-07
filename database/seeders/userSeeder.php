@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Hash;
 class userSeeder extends Seeder
 {
     /**
@@ -22,13 +22,14 @@ class userSeeder extends Seeder
         // 1 : aktif
         // 2 : tidak aktif
         
+    
         DB::table('user')->insert([
-            'name' => 'Destri wahyu ikhsani',
-            'email' => 'destri.iw@gmail.com',
-            'role' => '1', 
+            'name' => 'nildawati',
+            'email' => 'nildw@gmail.com',
+            'role' => '0', 
             'status' => 1, 
-            'password' => bcrypt('P@ssw0rd'), 
+            'password' => bcrypt('password'),
+ 
         ]);
-
     }
 }
