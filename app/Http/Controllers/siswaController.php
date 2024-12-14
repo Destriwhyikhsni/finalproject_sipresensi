@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\SiswaExport;
 use App\Models\Siswa;
 use App\Models\Kelas;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class siswaController extends Controller
 {
@@ -78,4 +80,11 @@ class siswaController extends Controller
 
     
     }
+
+    // fungsi untuk export ke excel
+    public function export_excel()
+    {
+        return Excel::download(new SiswaExport, 'datasiswa.xlsx');
+    }
 }
+

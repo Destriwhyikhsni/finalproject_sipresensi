@@ -5,6 +5,7 @@
 @section('content')
     <h1>Data Siswa</h1>
     <a href="{{ route('siswa.create') }}" class="btn btn-primary mb-3" style="font-size: 12px; background-color: #80C4E9;color :black;">Tambah Siswa</a>
+    <a href="{{ url('/siswa/export_excel') }}" class="btn btn-success mb-3" style="font-size: 12px;color :white;" target="_blank">Export Xlsx</a>
 
     
     @if (session('success'))

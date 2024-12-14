@@ -29,7 +29,8 @@ Route::middleware(['auth', 'akses:1'])->group(function () {
     Route::get('/beranda', [IndexController::class, 'authBeranda'])->name('beranda');
     Route::resource('pegawai', pegawaiController::class);
     Route::resource('kelas', kelasController::class);
-    Route::resource('siswa', siswaController::class);
+    Route::resource('siswa', siswaController::class)->except('show');
+    Route::get('/siswa/export_excel', [siswaController::class, 'export_excel']);
     Route::resource('jadwal', JadwalController::class);
     Route::resource('user', userController::class);
     Route::get('user/get-pegawai/{nip}', [UserController::class, 'getPegawai']);
@@ -52,6 +53,7 @@ Route::middleware(['auth', 'akses:1'])->group(function () {
 Route::middleware(['auth', 'akses:0'])->group(function () {
     Route::get('/dashboard', [PegawaiController::class, 'dashboard'])->name('dashboard');
     Route::get('/presensi', [PresensiSiswaController::class, 'index'])->name('presensi.index');
+    Route::get('/presensi/export/{jadwal_id}', [PresensiSiswaController::class, 'export'])->name('presensi.export');
     Route::post('/presensi', [PresensiSiswaController::class, 'store'])->name('presensi.store');
     Route::post('/presensi/clockin', [PresensiController::class, 'clockIn'])->name('presensi.clockin');
     Route::post('/presensi/clockout', [PresensiController::class, 'clockOut'])->name('presensi.clockout');

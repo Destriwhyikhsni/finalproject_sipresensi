@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PresensiSiswaExport;
 use Illuminate\Http\Request;
 use App\Models\PresensiSiswa;
 use App\Models\Jadpel;
@@ -9,6 +10,7 @@ use App\Models\Kelas;
 use App\Models\Siswa;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PresensiSiswaController extends Controller
 {
@@ -17,23 +19,37 @@ class PresensiSiswaController extends Controller
     {
         $user = Auth::user();
         $pegawaiId = $user->pegawai_id;
-
-        $jadpel = Jadpel::with('pegawai')
+    
+        // Tanggal hari ini
+        $today = Carbon::today();
+    
+        // Ambil jadwal mengajar untuk pegawai/guru yang login
+        $jadpel = Jadpel::with(['pegawai', 'mapel', 'kelas'])
             ->where('id_guru', $pegawaiId)
             ->get();
+    
+        // Tandai jadwal yang sudah memiliki presensi untuk hari ini
+        foreach ($jadpel as $schedule) {
+            $schedule->sudah_presensi = PresensiSiswa::where('jadwal', $schedule->id_jadwal)
+                ->whereDate('created_at', $today)
+                ->exists();
+        }
+    
         $jadwal = null;
         $students = [];
-
+    
+        // Jika ada jadwal dipilih, ambil data siswa dari kelas yang sesuai
         if ($request->has('jadwal_id')) {
-            $jadwal = Jadpel::with('mapel', 'kelas')->find($request->jadwal_id);
-
+            $jadwal = Jadpel::with(['mapel', 'kelas'])->find($request->jadwal_id);
+    
             if ($jadwal) {
                 $students = Siswa::with('kelas')
                     ->where('kelas', $jadwal->id_kelas)
                     ->get();
             }
         }
-
+    
+        // Return ke view
         return view('presensi', compact('jadpel', 'jadwal', 'students'));
     }
 
@@ -70,5 +86,11 @@ class PresensiSiswaController extends Controller
         }
 
         return redirect()->route('presensi.index')->with('success', 'Presensi berhasil disimpan!');
+    }
+
+    // ekspor ke excel
+    public function export($jadwal_id)
+    {
+        return Excel::download(new PresensiSiswaExport($jadwal_id), 'data_presensi_siswa.xlsx');
     }
 }
