@@ -52,6 +52,8 @@ Route::middleware(['auth', 'akses:1'])->group(function () {
 
 Route::middleware(['auth', 'akses:0'])->group(function () {
     Route::get('/dashboard', [PegawaiController::class, 'dashboard'])->name('dashboard');
+    Route::get('/rekap-presensi', [PegawaiController::class, 'rekapPresensi'])->name('pegawai.rekapPresensi');
+    Route::get('/export-presensi', [PegawaiController::class, 'exportPresensi'])->name('exportPresensi');
     Route::get('/presensi', [PresensiSiswaController::class, 'index'])->name('presensi.index');
     Route::get('/presensi/export/{jadwal_id}', [PresensiSiswaController::class, 'export'])->name('presensi.export');
     Route::post('/presensi', [PresensiSiswaController::class, 'store'])->name('presensi.store');

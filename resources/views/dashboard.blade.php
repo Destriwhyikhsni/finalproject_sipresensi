@@ -42,6 +42,9 @@
             @else
                 <p>Anda sudah menyelesaikan presensi hari ini.</p>
             @endif
+            <a href="{{ route('pegawai.rekapPresensi') }}"
+                class="btn btn-primary mt-3">Riwayat Presensi</a>
+
         </div>
         
     </div>

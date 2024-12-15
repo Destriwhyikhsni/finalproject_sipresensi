@@ -191,7 +191,7 @@
              <li class="nav-item">
                  <a class="nav-link collapsed" href="{{ route('presensi.index') }}">
                      <i class="bi bi-box-arrow-in-right"></i>
-                     <span>Presensi</span>
+                     <span>Presensi Siswa</span>
                  </a>
              </li><!-- End Login Page Nav -->
 

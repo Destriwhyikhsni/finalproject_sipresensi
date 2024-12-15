@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\RekapPresensiExport;
 use App\Models\Pegawai;
 use App\Models\PresensiPegawai;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class pegawaiController extends Controller
 {
@@ -25,6 +27,42 @@ class pegawaiController extends Controller
         
         return view('dashboard', compact('presensi'));
     }
+
+    public function rekapPresensi(Request $request)
+    {
+        $user = Auth::user();
+
+        // Ambil filter bulan dan tahun, default ke bulan dan tahun ini
+        $bulan = $request->input('bulan', now()->month);
+        $tahun = $request->input('tahun', now()->year);
+
+        // Ambil data presensi sesuai filter
+        $rekapPresensi = PresensiPegawai::where('id_pegawai', $user->pegawai_id)
+            ->whereYear('tanggal_presensi', $tahun)
+            ->whereMonth('tanggal_presensi', $bulan)
+            ->orderBy('tanggal_presensi', 'asc')
+            ->get();
+
+        return view('pegawai.recap', compact('rekapPresensi', 'bulan', 'tahun'));
+    }
+
+     // Fungsi untuk ekspor presensi
+     public function exportPresensi(Request $request)
+     {
+         $user = Auth::user();
+ 
+         $bulan = $request->input('bulan', now()->month);
+         $tahun = $request->input('tahun', now()->year);
+ 
+         // Ambil data presensi sesuai filter
+         $rekapPresensi = PresensiPegawai::where('id_pegawai', $user->pegawai_id)
+             ->whereYear('tanggal_presensi', $tahun)
+             ->whereMonth('tanggal_presensi', $bulan)
+             ->orderBy('tanggal_presensi', 'asc')
+             ->get();
+ 
+         return Excel::download(new RekapPresensiExport($rekapPresensi), "rekap_presensi_{$bulan}_{$tahun}.xlsx");
+     }
 
     public function create()
     {
